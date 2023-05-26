@@ -1,7 +1,6 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
-const {Circle, Square, Triangle} = require("./lib/shapes");
-
+const generateLogo = require("./utils/generateLogo");
 
 const questions =[
     {
@@ -27,13 +26,27 @@ const questions =[
     }
 ];
 
-function writetoFile(fileName, answered) {
-    fs.writeFile(fileName, svgString, (err) => {
+
+//once entering the inputs for the prompts
+function writetoFile(fileName, data) {
+    var answers = generateLogo(data);
+    fs.writeFile(fileName, answers, (err) => {
         if (err)
             throw err;
             console.log('Generated the logo.svg');
-        
-    })
-};
+    });
+}
+
+// initialize the app
+function init() {
+    inquirer.promopt(questions)
+    .then(function (data) {
+        var fileName = 'logo.svg';
+        writetoFile(fileName, data);
+    });
+}
+
+// calling to the previous function
+init();
 
 
